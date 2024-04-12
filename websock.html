@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head><title>WebSocket</title></head>
+  <body>
+    <script>
+	function myFunction() {
+	if(ws.readyState == 1) ws.close();
+	}
+	var prev = new Date().getTime();
+      var ws = new WebSocket("ws://192.168.73.185:11111/"),
+          messages = document.createElement('ul');
+      ws.onmessage = function (event) {
+	  var curr = new Date().getTime(); // current time a message is received
+	  var diff = curr - prev;
+	  prev = curr; //update previous time 
+        var messages = document.getElementsByTagName('ul')[0],
+        message = document.createElement('li'),
+        content = document.createTextNode(event.data + ' ' + diff);
+        message.appendChild(content);
+		if(diff < 1500) message.style.color = '#FF0000';
+		if(diff > 3500) message.style.color = '#00FF00';
+        messages.appendChild(message);
+		if(messages.childElementCount > 10)
+		   messages.removeChild(messages.firstChild);
+      };
+      document.body.appendChild(messages);
+    </script>
+  </body>
+</html>	
